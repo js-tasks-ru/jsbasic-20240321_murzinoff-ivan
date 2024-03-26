@@ -14,7 +14,7 @@ function isValid(name) {
     return false;
   } else {
     for (let i = 0; i <= name.length - 1; i++) {
-      if (name[i] === ' ') {
+      if (name.includes(" ")) {
         return false;
       }
     }
