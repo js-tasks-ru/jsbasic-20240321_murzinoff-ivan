@@ -1,10 +1,3 @@
 function showSalary(users, age) {
-  // ваш код...
-  let salaryList = '';
-  for (let prop in users) {
-    if (users[prop].age <= age){
-      salaryList = salaryList + users[prop].name + ', ' + users[prop].balance + '\n';
-    }
-  }
-  return salaryList.slice(0, -1);
+  return users.filter(item => item.age <= age).map(item => item.name + ', ' + item.balance).join('\n');
 }
