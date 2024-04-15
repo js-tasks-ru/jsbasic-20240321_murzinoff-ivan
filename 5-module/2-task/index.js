@@ -4,7 +4,7 @@ function toggleText() {
   const text = document.querySelector('div');
 
   btn.addEventListener('click', function() {
-    if (text.dataset.hidden === 'no') {
+    if (text.dataset.hidden === undefined || text.dataset.hidden === 'no') {
       text.hidden = 'true';
       text.dataset.hidden = 'yes';
     } else {
