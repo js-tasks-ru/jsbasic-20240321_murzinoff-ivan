@@ -11,7 +11,7 @@ export default class RibbonMenu {
   #render() {
     const slider = createElement(`
     <div class="ribbon">
-      <button class="ribbon__arrow ribbon__arrow_left ribbon__arrow_visible">
+      <button class="ribbon__arrow ribbon__arrow_left">
         <img src="/assets/images/icons/angle-icon.svg" alt="icon">
       </button>
 
@@ -34,24 +34,40 @@ export default class RibbonMenu {
     const forwardButton = this.elem.querySelector('.ribbon__arrow_right');
     const backButton = this.elem.querySelector('.ribbon__arrow_left');
     const ribbon = this.elem.querySelector('.ribbon__inner');
-    const scrollWidth = ribbon.scrollWidth;
-    
-    let currentScroll = ribbon.scrollX;
+    let scrollWidth = ribbon.scrollWidth;
+    let scrollLeft = ribbon.scrollLeft;
+    let clientWidth = ribbon.clientWidth;
+    let scrollRight = scrollWidth - scrollLeft - clientWidth;
 
     forwardButton.addEventListener('click', () => {
-      // currentScroll;
       ribbon.scrollBy(350, 0);
-      console.log('currentScroll ' + ribbon.scrollLeft);
-      console.log('scrollWidth ' + ribbon.scrollWidth);
-      // backButton.classList = 'ribbon__arrow ribbon__arrow_left ribbon__arrow_visible';
+      showHideArrows();
     })
 
     backButton.addEventListener('click', () => {
-      // currentScroll;
       ribbon.scrollBy(-350, 0);
-      console.log('currentScroll ' + ribbon.scrollLeft);
-      console.log('scrollWidth ' + ribbon.scrollWidth);
+      showHideArrows();
     })
+
+    const showHideArrows = () => {
+      let scrollWidth = ribbon.scrollWidth;
+      let scrollLeft = ribbon.scrollLeft;
+      let clientWidth = ribbon.clientWidth;
+      let scrollRight = scrollWidth - scrollLeft - clientWidth;
+
+      if (scrollLeft === 0) {
+        backButton.classList.remove('ribbon__arrow_visible');
+      } else {
+        backButton.classList.add('ribbon__arrow_visible');
+      }
+
+      if (scrollRight < 1) {
+        forwardButton.classList.remove('ribbon__arrow_visible');
+      } else {
+        forwardButton.classList.add('ribbon__arrow_visible');
+      }
+    }
+
   }
 
   #userEventListeners() {
@@ -59,10 +75,18 @@ export default class RibbonMenu {
         const clickedCategory = event.target.closest('.ribbon__item');
         if (clickedCategory) {
             const categoryId = clickedCategory.dataset.id;
+
+            document.querySelectorAll('.ribbon__item').forEach(item => {
+              item.classList.remove('ribbon__item_active');
+            })
+
+            clickedCategory.classList.add('ribbon__item_active');
+
             this.elem.dispatchEvent(new CustomEvent("ribbon-select", {
                 detail: categoryId,
                 bubbles: true
             }));
+
         }
     });
   }
